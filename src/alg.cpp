@@ -1,57 +1,66 @@
 // Copyright 2021 NNTU-CS
 
-
+int binary_search(int* arr, int len, int value) {
+    int left = 0;
+    int right = len - 1;
+    int count = 0;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        if (arr[mid] == value) {
+            count++;
+            int i = mid - 1;
+            while (i >= left && arr[i] == value) {
+                count++;
+                i--;
+            }
+            i = mid + 1;
+            while (i <= right && arr[i] == value) {
+                count++;
+                i++;
+            }
+            return count;
+        } else if (arr[mid] < value) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return count;
+}
 int countPairs1(int *arr, int len, int value) {
   return 0;
-}
-  int count1 = 0;
-  for (int i = 0; i < len-1; i++) {
-    for (int j = i + 1; j < len; j++) {
-      if (arr[i] + arr[j] == value) {
-        count1++;
-      }
+    int countSum = 0;
+    for (int i = 0; i < len; i++) {
+        for (int j = i + 1; j < len; j++) {
+            if (arr[i] + arr[j] == value) {
+                countSum++;
+            }
+        }
     }
-  }
-  return count1;
+    return countSum;
 }
 int countPairs2(int *arr, int len, int value) {
   return 0;
-  int count2 = 0;
-  for (int i = 0; i < len - 1; i++) {
-    for (int j = len - 1; i < j; j--) {
-      if (arr[i] + arr[j] == value) {
-        count2++;
-      }
+    int countSum = 0;
+    int newLen = len - 1;
+    while (arr[newLen] > value) {
+        newLen -= 1;
     }
-  }
-  return count2;
+    for (int i = 0; i < newLen; i++) {
+        for (int j = newLen; j > i; j--) {
+            if (arr[i] + arr[j] == value) {
+                countSum++;
+            }
+        }
+    }
+    return countSum;
 }
 int countPairs3(int *arr, int len, int value) {
   return 0;
-  int count3 = 0;
-  for (int i = 0; i < len - 1; i++) {
-    int rig = len, lef = i;
-    while (rig - 1 > lef) {
-      int mids = (lef + rig) / 2;
-      if (arr[i] + arr[mids] == value) {
-        count3++;
-        int midd = mids + 1;
-        while (arr[i] + arr[midd] == value && midd < rig) {
-          count3++;
-          midd++;
-        }
-        midd = mids - 1;
-        while (arr[i] + arr[midd] == value && midd > lef) {
-          count3++;
-          midd--;
-        }
-        break;
-      }
-       if (arr[i] + arr[mids] > value) {
-        rig = mids;
-      } else {
-        lef = mids;
-      }
+    int count = 0;
+    for (int i = 0; i < len; i++) {
+        int num = value - arr[i];
+        count += binary_search(arr + i + 1, len - i - 1, num);
     }
-  }
-  return count3;
+    return count;
+}
