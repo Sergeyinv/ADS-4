@@ -1,67 +1,54 @@
 // Copyright 2021 NNTU-CS
 
 
-int binary_search(int* arr, int len, int value) {
-    int left = 0;
-    int right = len - 1;
-    int count = 0;
-    while (left <= right) {
-        int mid = (left + right) / 2;
-        if (arr[mid] == value) {
-            count++;
-            int i = mid - 1;
-            while (i >= left && arr[i] == value) {
-                count++;
-                i--;
-            }
-            i = mid + 1;
-            while (i <= right && arr[i] == value) {
-                count++;
-                i++;
-            }
-            return count;
-        } else if (arr[mid] < value) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
+int countPairs1(int* arr, int len, int value) {
+  int count = 0;
+  for (int i = 0; i < len - 1; i++) {
+    for (int j = i + 1; j < len; j++) {
+      if (arr[i] + arr[j] == value) {
+        count += 1;
+      }
     }
-    return count;
+  }
+  return count;
 }
-int countPairs1(int *arr, int len, int value) {
-  return 0;
-    int countSum = 0;
-    for (int i = 0; i < len; i++) {
-        for (int j = i + 1; j < len; j++) {
-            if (arr[i] + arr[j] == value) {
-                countSum++;
-            }
-        }
+int countPairs2(int* arr, int len, int value) {
+  int count = 0;
+  for (int i = 0; i < len - 1; i++) {
+    for (int j = len - 1; j > i; j--) {
+      if (arr[i] + arr[j] == value) {
+        count += 1;
+      }
     }
-    return countSum;
+  }
+  return count;
 }
-int countPairs2(int *arr, int len, int value) {
-  return 0;
-    int countSum = 0;
-    int newLen = len - 1;
-    while (arr[newLen] > value) {
-        newLen -= 1;
-    }
-    for (int i = 0; i < newLen; i++) {
-        for (int j = newLen; j > i; j--) {
-            if (arr[i] + arr[j] == value) {
-                countSum++;
-            }
+int countPairs3(int* arr, int len, int value) {
+  int count = 0;
+  for (int i = 0; i < len - 1; i++) {
+    int s = i, f = len;
+    while (1 < f - s) {
+      int mid = (s + f) / 2;
+      if (arr[i] + arr[mid] == value) {
+        count++;
+        int r = mid + 1;
+        while (arr[i] + arr[r] == value && r < f) {
+          count++;
+          r++;
         }
+        r = mid - 1;
+        while (arr[i] + arr[r] == value && r > s) {
+          count++;
+          r--;
+        }
+        break;
+      }
+      if (arr[i] + arr[mid] > value) {
+        f = mid;
+      } else {
+        s = mid;
+      }
     }
-    return countSum;
-}
-int countPairs3(int *arr, int len, int value) {
-  return 0;
-    int count = 0;
-    for (int i = 0; i < len; i++) {
-        int num = value - arr[i];
-        count += binary_search(arr + i + 1, len - i - 1, num);
-    }
-    return count;
+  }
+  return count;
 }
